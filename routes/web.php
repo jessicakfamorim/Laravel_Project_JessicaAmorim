@@ -28,6 +28,9 @@ Route::put('/update-banda', [BandaController::class, 'update'])->name('bandas.up
 // de ler e torna evidente qual banda está a ser editada.
 Route::get('/edit-banda/{id}', [BandaController::class, 'edit'])->name('bandas.edit');
 
+// Route para apagar uma banda
+Route::get('/delete-banda/{id}', [BandaController::class, 'destroy'])->name('bandas.delete');
+
 // **** ÁLBUNS ****
 // Route para apresentar o formulário de criação de álbuns
 Route::get('/albuns/create', [AlbumController::class, 'create'])->name('albuns.create');

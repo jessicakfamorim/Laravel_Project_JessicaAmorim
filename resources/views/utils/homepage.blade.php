@@ -38,7 +38,7 @@
                         O ID da banda é enviado como parâmetro da rota. -->
                         <a href="{{ route('albuns.index', $banda->id) }}" class="btn btn-info btn-sm"> Ver Álbuns </a>
                         <a href="{{ route('bandas.edit', $banda->id) }}" class="btn btn-warning btn-sm"> Editar </a>
-                        <a href="#" class="btn btn-danger btn-sm">Apagar </a>
+                        <a href="{{ route('bandas.delete', $banda->id) }}" class="btn btn-danger btn-sm">Apagar </a>
                     </td>
                 </tr>
             @endforeach

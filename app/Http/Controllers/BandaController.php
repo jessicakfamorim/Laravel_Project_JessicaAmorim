@@ -121,11 +121,18 @@ class BandaController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove uma banda da base de dados.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        // Procura a banda correspondente ao ID recebido pela rota.
+        $banda = Banda::find($id);
+
+        // Apaga a banda da base de dados.
+        $banda->delete();
+
+        // Redireciona o utilizador para a homepage.
+        return redirect()->route('homepage');
     }
 
     public function fallbackFunction()
