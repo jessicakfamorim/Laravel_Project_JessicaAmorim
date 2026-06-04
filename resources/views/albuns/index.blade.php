@@ -20,6 +20,9 @@
                 <tr>
                     <td>{{ $album->nome }}</td>
                     <td>
+                        <!--
+                        Exibe a imagem guardada para o álbum. asset('storage/...') cria o caminho público para o ficheiro.
+                        $album->imagem contém o caminho da imagem guardado na base de dados. -->
                         <img src="{{ asset('storage/' . $album->imagem) }}" width="100" class="img-thumbnail" alt="Imagem do álbum">
                     </td>
                     <td>{{ $album->data_lancamento }}</td>

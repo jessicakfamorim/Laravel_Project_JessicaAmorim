@@ -41,20 +41,30 @@ class BandaController extends Controller
      * Guarda uma nova banda na base de dados.
      */
 
-        // Request → classe do Laravel responsável por receber os dados enviados pelos formulários.
-        // $request → objeto/variável que contém estes dados.
+    // Request → classe do Laravel responsável por receber os dados enviados pelos formulários.
+    // $request → objeto/variável que contém estes dados.
     public function store(Request $request)
     {
-        //dd($request);
-        
+        // dd($request);
+
         // Valida os dados recebidos do formulário.
         $request->validate([
-            'nome' => 'required|max:100'
+            'nome' => 'required|max:100',
+            'foto' => 'required|image',
         ]);
+
+        // Guarda a imagem e devolve o caminho onde ficou armazenada.
+        // Esse camimho fica guardado na variável $caminhoFoo para posteriormente ser inserido na base de dados.
+        // $request->file('foto') vai buscar o ficheiro enviado pelo campo imagem do formulário.
+        // ->store('bandas', 'public') significa: "Guarda esse ficheiro na pasta bandas do disco public."
+        $caminhoFoto = $request->file('foto')->store('bandas', 'public');
+
+        // dd($caminhoFoto);
 
         // Cria um novo registo na tabela bandas.
         Banda::create([
             'nome' => $request->nome,
+            'foto' => $caminhoFoto,
         ]);
 
         // Redireciona o utilizador para a homepage.
@@ -70,19 +80,44 @@ class BandaController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Apresenta o formulário de edição de uma banda.
      */
     public function edit(string $id)
     {
-        //
+        // Procura a banda correspondente ao ID recebido pela rota.
+        $banda = Banda::find($id);
+
+        // Envia a banda para a view.
+        return view('bandas.edit', compact('banda'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        // Procura a banda que será atualizada.
+        $banda = Banda::find($request->id);
+
+        // Atualiza o nome da banda.
+        $banda->nome = $request->nome;
+
+        // Verifica se o utilizador escolheu uma nova foto.
+        // Só executa o código abaixo se o utilizador tiver escolhido uma nova foto.
+        if ($request->hasFile('foto')) {
+
+            // Guarda a nova foto e devolve o caminho.
+            $caminhoFoto = $request->file('foto')->store('bandas', 'public');
+
+            // Atualiza o caminho da foto na base de dados.
+            $banda->foto = $caminhoFoto;
+        }
+
+        // Guarda as alterações na base de dados.
+        $banda->save();
+
+        // Redireciona o utilizador para a homepage.
+        return redirect()->route('homepage');
     }
 
     /**

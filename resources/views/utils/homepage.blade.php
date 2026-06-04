@@ -25,7 +25,10 @@
             @foreach ($bandas as $banda)
                 <tr>
                     <td>
-                        <img src="https://placehold.co/100x100" alt="Foto da banda" class="img-thumbnail">
+                        <!--
+                        Exibe a imagem guardada para a banda. asset('storage/...') cria o caminho público para o ficheiro.
+                        $banda->foto contém o caminho da imagem guardado na base de dados. -->
+                        <img src="{{ asset('storage/' . $banda->foto) }}" width="100" alt="Foto da banda" class="img-thumbnail">
                     </td>
                     <td> {{ $banda->nome }} </td>
                     <td> 0 </td>
@@ -34,7 +37,7 @@
                         Envia o utilizador para a página de álbuns da banda selecionada.
                         O ID da banda é enviado como parâmetro da rota. -->
                         <a href="{{ route('albuns.index', $banda->id) }}" class="btn btn-info btn-sm"> Ver Álbuns </a>
-                        <a href="#" class="btn btn-warning btn-sm"> Editar </a>
+                        <a href="{{ route('bandas.edit', $banda->id) }}" class="btn btn-warning btn-sm"> Editar </a>
                         <a href="#" class="btn btn-danger btn-sm">Apagar </a>
                     </td>
                 </tr>
