@@ -11,15 +11,38 @@
 
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
-        <div class="container"> <a class="navbar-brand fw-bold" href="/">Bandas </a> <button
+        <div class="container"> <a class="navbar-brand fw-bold" href="{{ route('homepage') }}">Bandas </a> <button
                 class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBandas"> <span
                     class="navbar-toggler-icon"></span> </button>
             <div class="collapse navbar-collapse" id="navbarBandas">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"> <a class="nav-link" href="">Início</a> </li>
-                    <li class="nav-item"> <a class="nav-link" href="">Bandas</a> </li>
-                    <li class="nav-item"> <a class="nav-link" href="">Álbuns</a> </li>
-                    <li class="nav-item"> <a class="nav-link" href="">Dashboard</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('homepage') }}">Início</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('homepage') }}">Bandas</a> </li>
+
+                    @if (Route::has('login'))
+                    {{-- @auth verifica se existe um utilizador autenticado. Se existir, mostra os botões Dashboard e Logout.
+                    Caso contrário, são mostrados os botões Login e Registo. --}}
+                        @auth
+                            <li class= "nav-item me-2">
+                                <a href="{{ route('dashboard') }}" class="btn btn-info">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button class="btn btn-warning" type="submit">Logout</button>
+                                </form>
+                            </li>
+
+                        @else
+                            <li class="nav-item me-2">
+                                <a href="{{ route('login') }}" class="btn btn-success">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('register') }}" class="btn btn-primary">Registo</a>
+                            </li>
+
+                        @endauth
+                    @endif
                 </ul>
             </div>
         </div>
@@ -29,5 +52,3 @@
 </body>
 
 </html>
-
-{{-- !!!!!!!!!usar as diretivas @auth e @guest para mostrar o link do Dashboard apenas a quem estiver ligado --}}

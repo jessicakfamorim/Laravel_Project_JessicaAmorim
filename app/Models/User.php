@@ -17,6 +17,10 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    // Tipos de utilizador da aplicação.
+    const TYPE_ADMIN = 1;
+    const TYPE_USER = 2;
+
     /**
      * Get the attributes that should be cast.
      *

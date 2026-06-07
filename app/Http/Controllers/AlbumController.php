@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Models\Banda;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AlbumController extends Controller
 {
@@ -29,6 +31,12 @@ class AlbumController extends Controller
      */
     public function create()
     {
+
+         // Apenas administradores podem criar álbuns.
+        if (Auth::user()->user_type != User::TYPE_ADMIN) {
+            return redirect()->route('homepage');
+        }
+
         // Banda::all() executa uma consulta à tabela bandas na base de dados e devolve todos os registos encontrados.
         // O resultado é guardado na variável $bandas.
         $bandas = Banda::all();
@@ -47,6 +55,12 @@ class AlbumController extends Controller
     // $request → objeto/variável que contém estes dados.
     public function store(Request $request)
     {
+
+        // Apenas administradores podem criar álbuns.
+        if (Auth::user()->user_type != User::TYPE_ADMIN) {
+            return redirect()->route('homepage');
+        }
+
         // dd($request);
 
         // Valida os dados recebidos do formulário.
@@ -87,24 +101,86 @@ class AlbumController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+
+        // Apenas utilizadores autenticados podem editar.
+        if (!Auth::check()) {
+            return redirect()->route('homepage');
+        }
+
+        // Procura o álbum correspondente ao ID recebido pela rota.
+        $album = Album::find($id);
+
+        // Obtém todas as bandas para preencher a lista de seleção.
+        $bandas = Banda::all();
+
+        // Envia o álbum e as bandas para a view.
+        return view('albuns.edit', compact('album', 'bandas'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+
+        // Apenas utilizadores autenticados podem editar.
+        if (!Auth::check()) {
+            return redirect()->route('homepage');
+        }
+
+        // Procura o álbum que será atualizado.
+        $album = Album::find($request->id);
+
+        // Atualiza o nome do álbum.
+        $album->nome = $request->nome;
+
+        // Atualiza a data de lançamento.
+        $album->data_lancamento = $request->data_lancamento;
+
+        // Atualiza a banda associada ao álbum.
+        $album->banda_id = $request->banda_id;
+
+        // Verifica se o utilizador escolheu uma nova imagem.
+        // Só executa o código abaixo se o utilizador tiver escolhido uma nova imagem.
+        if ($request->hasFile('imagem')) {
+
+            // Guarda a nova imagem e devolve o caminho.
+            $caminhoImagem = $request->file('imagem')->store('albuns', 'public');
+
+            // Atualiza o caminho da imagem na base de dados.
+            $album->imagem = $caminhoImagem;
+        }
+
+        // Guarda as alterações na base de dados.
+        $album->save();
+
+        // Redireciona o utilizador para a página dos álbuns da banda.
+        return redirect()->route('albuns.index', $album->banda_id);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove um álbum da base de dados.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+
+        // Apenas administradores podem apagar álbuns.
+        if (Auth::user()->user_type != User::TYPE_ADMIN) {
+            return redirect()->route('homepage');
+        }
+
+        // Procura o álbum correspondente ao ID recebido pela rota.
+        $album = Album::find($id);
+
+        // Guarda o ID da banda antes de apagar o álbum.
+        $bandaId = $album->banda_id;
+
+        // Remove o álbum da base de dados.
+        $album->delete();
+
+        // Redireciona o utilizador para a lista de álbuns da banda.
+        return redirect()->route('albuns.index', $bandaId);
     }
 }

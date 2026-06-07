@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Banda;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BandaController extends Controller
 {
@@ -34,6 +36,11 @@ class BandaController extends Controller
      */
     public function create()
     {
+        // Apenas administradores podem criar bandas.
+        if (Auth::user()->user_type != User::TYPE_ADMIN) {
+            return redirect()->route('homepage');
+        }
+
         return view('bandas.create');
     }
 
@@ -45,6 +52,12 @@ class BandaController extends Controller
     // $request → objeto/variável que contém estes dados.
     public function store(Request $request)
     {
+
+        // Apenas administradores podem criar bandas.
+        if (Auth::user()->user_type != User::TYPE_ADMIN) {
+        return redirect()->route('homepage');
+        }
+
         // dd($request);
 
         // Valida os dados recebidos do formulário.
@@ -84,6 +97,12 @@ class BandaController extends Controller
      */
     public function edit(string $id)
     {
+
+        // Apenas utilizadores autenticados podem editar.
+        if (!Auth::check()) {
+        return redirect()->route('homepage');
+        }
+
         // Procura a banda correspondente ao ID recebido pela rota.
         $banda = Banda::find($id);
 
@@ -96,6 +115,12 @@ class BandaController extends Controller
      */
     public function update(Request $request)
     {
+
+        // Apenas utilizadores autenticados podem editar.
+        if (!Auth::check()) {
+        return redirect()->route('homepage');
+        }
+
         // Procura a banda que será atualizada.
         $banda = Banda::find($request->id);
 
@@ -125,6 +150,12 @@ class BandaController extends Controller
      */
     public function destroy($id)
     {
+
+        // Apenas administradores podem apagar bandas.
+        if (Auth::user()->user_type != User::TYPE_ADMIN) {
+        return redirect()->route('homepage');
+        }
+
         // Procura a banda correspondente ao ID recebido pela rota.
         $banda = Banda::find($id);
 

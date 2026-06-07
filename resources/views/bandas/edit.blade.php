@@ -38,7 +38,9 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Foto</label>
+            <img src="{{ asset('storage/' . $banda->foto) }}" width="150" class="img-thumbnail mb-3"
+                alt="Imagem atual da Banda">
+                <label class="form-label">Imagem da banda</label>
             <input type="file" class="form-control" name="foto">
         </div>
 
