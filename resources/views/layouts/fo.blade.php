@@ -47,7 +47,20 @@
             </div>
         </div>
     </nav>
-    <main class="container py-4"> @yield('content') </main>
+
+    <main class="container py-4">
+
+        {{-- Verifica se existe uma mensagem de sucesso guardada na sessão.
+            Se existir, mostra a mensagem ao utilizador. --}}
+        @if(session('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
+        @yield('content')
+
+    </main>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

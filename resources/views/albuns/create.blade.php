@@ -21,14 +21,26 @@
         <div class="mb-3">
             <label class="form-label"> Nome do Álbum </label>
             <input type="text" class="form-control" name="nome">
+
+            @error('nome')
+                <p class="text-danger">O nome do álbum é obrigatório.</p>
+            @enderror
         </div>
          <div class="mb-3">
             <label class="form-label"> Imagem do Álbum </label>
             <input type="file" class="form-control" name="imagem">
+
+            @error('imagem')
+                <p class="text-danger">Deve selecionar uma imagem válida.</p>
+            @enderror
         </div>
 
         <div class="mb-3"> <label class="form-label"> Data de Lançamento </label>
             <input type="date" class="form-control" name="data_lancamento">
+            
+            @error('data_lancamento')
+                <p class="text-danger">A data de lançamento é obrigatória.</p>
+            @enderror
         </div>
 
         <div class="mb-3">
@@ -48,6 +60,9 @@
                 @endforeach
 
             </select>
+            @error('banda_id')
+                <p class="text-danger">Deve selecionar uma banda.</p>
+            @enderror
         </div>
 
         <button class="btn btn-primary"> Guardar </button>

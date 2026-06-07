@@ -87,7 +87,8 @@ class AlbumController extends Controller
         // dd('Álbum guardado com sucesso!');
 
         // Redireciona o utilizador para a homepage.
-        return redirect()->route('homepage');
+        return redirect()->route('homepage')
+        ->with('message', 'Álbum criado com sucesso.');
     }
 
     /**
@@ -130,6 +131,13 @@ class AlbumController extends Controller
             return redirect()->route('homepage');
         }
 
+        // Valida os dados recebidos do formulário.
+        $request->validate([
+            'nome' => 'required|max:100',
+            'data_lancamento' => 'required',
+            'banda_id' => 'required',
+        ]);
+
         // Procura o álbum que será atualizado.
         $album = Album::find($request->id);
 
@@ -157,7 +165,8 @@ class AlbumController extends Controller
         $album->save();
 
         // Redireciona o utilizador para a página dos álbuns da banda.
-        return redirect()->route('albuns.index', $album->banda_id);
+        return redirect()->route('albuns.index', $album->banda_id)
+        ->with('message', 'Álbum atualizado com sucesso.');
     }
 
     /**
@@ -181,6 +190,7 @@ class AlbumController extends Controller
         $album->delete();
 
         // Redireciona o utilizador para a lista de álbuns da banda.
-        return redirect()->route('albuns.index', $bandaId);
+        return redirect()->route('albuns.index', $bandaId)
+        ->with('message', 'Álbum excluído com sucesso.');
     }
 }

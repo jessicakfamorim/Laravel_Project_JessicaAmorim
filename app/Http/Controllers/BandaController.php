@@ -18,7 +18,9 @@ class BandaController extends Controller
     // Função para a rota '/home' (Página principal das bandas)
     public function homepageFunction()
     {
-        $bandas = Banda::all();
+        // Procura todas as bandas e ordena por nome
+        // por ordem alfabética (A-Z).
+        $bandas = Banda::orderBy('nome')->get();
 
         return view('utils.homepage', compact('bandas'));
     }
@@ -81,7 +83,8 @@ class BandaController extends Controller
         ]);
 
         // Redireciona o utilizador para a homepage.
-        return redirect()->route('homepage');
+        return redirect()->route('homepage')
+        ->with('message', 'Banda criada com sucesso.');
     }
 
     /**
@@ -142,7 +145,8 @@ class BandaController extends Controller
         $banda->save();
 
         // Redireciona o utilizador para a homepage.
-        return redirect()->route('homepage');
+        return redirect()->route('homepage')
+        ->with('message', 'Álbum atualizado com sucesso.');
     }
 
     /**
@@ -163,7 +167,8 @@ class BandaController extends Controller
         $banda->delete();
 
         // Redireciona o utilizador para a homepage.
-        return redirect()->route('homepage');
+        return redirect()->route('homepage')
+        ->with('message', 'Álbum excluído com sucesso.');
     }
 
     public function fallbackFunction()

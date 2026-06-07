@@ -25,15 +25,17 @@
             Verifica se existe algum erro de validação associado ao campo "nome".
             Se existir, apresenta a mensagem de erro gerada automaticamente pelo Laravel. -->
             @error('nome')
-                <p class="text-danger">
-                    {{ $message }}
-                </p>
+                <p class="text-danger">{{ $message }}</p>
             @enderror
         </div>
 
         <div class="mb-3">
             <label class="form-label">Foto</label>
             <input type="file" class="form-control" name="foto">
+
+            @error('foto')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
         </div>
 
         <!--
